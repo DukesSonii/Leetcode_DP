@@ -1,0 +1,37 @@
+class Solution {
+    public int uniquePathsIII(int[][] grid) {
+        //sx represents x cordinate of start idx and sy represent y cordinate
+        int zero=0,sx=0,sy=0;
+        for(int r=0;r<grid.length;r++){
+            for(int c=0;c<grid[0].length;c++){
+                if(grid[r][c] == 0) zero++; //current cell 
+                else if(grid[r][c] == 1){   
+                    sx=r;
+                    sy=c;
+                }    
+            }
+        }
+        return dfs(grid,sx,sy,zero);
+    }
+    public int dfs(int[][]grid, int x, int y, int zero){
+        if(x<0 || y<0 || x >= grid.length || y>= grid[0].length || grid[x][y] == -1 ){
+            //we can either use visite array or can use
+            //grid[x][y] means already visit the obstacle
+            return 0; 
+        }
+        //if we reach the grid which is ending cell i.e dest 
+        if(grid[x][y]==2){
+            return zero == -1 ? 1:0;   //found valid path return 1 else 0 
+        }
+        grid[x][y]=-1;  //and then mark vis cell as -1
+        zero--;
+        int totalpath = dfs(grid,x+1,y,zero) +
+                        dfs(grid,x,y+1,zero) +
+                        dfs(grid,x-1,y,zero) +
+                        dfs(grid,x,y-1,zero);
+        //if path not found then do backtracking step and increase the zero cnt
+        grid[x][y] = 0;
+        zero++;
+        return totalpath;
+    }
+}
