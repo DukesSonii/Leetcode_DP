@@ -1,0 +1,28 @@
+class Solution {
+    public Integer[] dp;
+    
+    public int rob(int[] nums) {
+        dp = new Integer[nums.length];
+        return robFrom(nums, 0);    //0 wala idx pe jo house h waha se start krenge ki chori kra ya nh 
+    }
+    
+    private int robFrom(int[] wealth, int currentIndex) {
+        //base case
+        //t.c 2nd ke acc. ham sirf 2,9 1 pe skte agr idx 5,6 pe jaye toh return 0
+        if (currentIndex >= wealth.length){
+            return 0;
+        }
+        if (dp[currentIndex] != null){
+            return dp[currentIndex];
+        }
+        
+        /*chori ki toh uski wealth(val/money) uthani padegi + 2 bc we have to skip next house and go to 
+        other house*/
+        int stealCurrent = wealth[currentIndex] + robFrom(wealth, currentIndex + 2);
+        
+        //agr paisa nh uthaya toh ghar ke next ghar se dhundna start krdo isliye + 1
+        int skipCurrent = robFrom(wealth, currentIndex + 1);
+
+        return dp[currentIndex] = Math.max(stealCurrent, skipCurrent);
+    }
+}
